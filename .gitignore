@@ -27,3 +27,11 @@ proguard/
 *.ipr
 *.iws
 .idea/
+
+
+# Python
+
+.pydevproject
+*.py[cod]
+
+*.sqlite3
