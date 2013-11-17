@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% load i18n staticfiles %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<style type="text/css">
+#nav-menu-top-bar {
+	background-color: #49aa43;
+	background-image: none;
+}
+</style>
+{% endblock %}
+
+{% block title %}{{ title }} | {% trans 'the food chain' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" class="brand"><img src="{% static 'logo.png' %}" /></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
