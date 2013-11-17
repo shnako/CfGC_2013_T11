@@ -39,6 +39,7 @@ def dist(a, b):
 def smart_scheduler(max_journey_duration, max_meals_per_drive):
     kitchens = models.Kitchen.objects.all()
     recipients = models.Recipient.objects.all()
+    print max_journey_duration
     for r in recipients:
         r.num_meals = r.meal_set.count()
 
@@ -91,7 +92,7 @@ def smart_scheduler(max_journey_duration, max_meals_per_drive):
 
                         sum_time +=step['duration']['value']
                 #print sum_time
-                if (sum_time>120*60-(10*60*len(route))):
+                if (sum_time>max_journey_duration*60-(10*60*len(route))):
                     r_set.add(route[-1])
                     route = route[:-1]
                 else:
