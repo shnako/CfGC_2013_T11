@@ -26,3 +26,17 @@ class Meal(models.Model):
     recipient = models.ForeignKey(Recipient)
     meal_type = models.CharField(max_length=255)
     comment = models.TextField(blank=True)
+
+
+class Drive(models.Model):
+    kitchen = models.ForeignKey(Kitchen)
+    meals_to_deliver = models.IntegerField(null=True, blank=True)
+
+class Delivery(models.Model):
+    class Meta:
+        ordering = ['order']
+    
+    drive = models.ForeignKey(Drive)
+    order = models.IntegerField()
+    recipient = models.ForeignKey(Recipient)
+    delivered = models.BooleanField(default=False)

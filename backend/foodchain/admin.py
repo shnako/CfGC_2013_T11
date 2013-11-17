@@ -4,8 +4,9 @@ from django.conf.urls import url, patterns
 from django.shortcuts import render, redirect
 from django import forms
 
-from foodchain.models import Kitchen, Recipient, Meal
-from foodchain import csv_import
+from foodchain.models import Kitchen, Recipient, Meal, Drive
+from foodchain import csv_import, routing
+from foodchain.forms import PlannerParametersForm
 
 # Register your models here.
 
@@ -66,3 +67,26 @@ class RecipientAdmin(admin.ModelAdmin):
         return render(request, 'admin/foodchain/import_csv.html', { 'form': form })
 
 admin.site.register(Recipient, RecipientAdmin)
+
+class DriveAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(DriveAdmin, self).get_urls()
+        my_urls = patterns('',
+            url(r'^planner/$', self.admin_site.admin_view(self.planner_view), name='route-planner')
+        )
+        return my_urls + urls
+    
+    def planner_view(self, request):
+        if request.method == 'POST':
+            form = PlannerParametersForm(request.POST)
+            if form.is_valid():
+                routing.handle_scheduling(form.cleaned_data)
+                self.message_user(request, 'Schedule updated successfully')
+                return redirect('admin:route-planner')
+        else:
+            form = PlannerParametersForm()
+        return render(request, 'admin/foodchain/planner.html', { 'form': form })
+
+admin.site.register(Drive, DriveAdmin)
+
+admin.site.index_template = 'admin/custom_index.html'
