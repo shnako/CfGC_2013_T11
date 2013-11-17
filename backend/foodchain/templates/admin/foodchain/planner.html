@@ -19,17 +19,71 @@
 
 {% if drives %}
 
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHNzcZ7GiMUGjA2cVeTjsktAMzM3hJq2M&sensor=false">
+</script>
+<script type="text/javascript">
+var jsData = {{ js_data|safe }};
+
+  function initialize() {
+    var mapOptions = {
+      center: new google.maps.LatLng(51.5072, -0.0675),
+      zoom: 11,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    googleMap = new google.maps.Map(document.getElementById("map-canvas"),
+        mapOptions);
+    
+    for (var i = 0; i < jsData.kitchens.length; i++) {
+    	var k = jsData.kitchens[i];
+    	new google.maps.Marker({
+    		map: googleMap,
+    		position: new google.maps.LatLng(k.lat, k.lng),
+    		title: k.kitchen_id
+    	});
+    }
+    for (var i = 0; i < jsData.recipients.length; i++) {
+    	var r = jsData.recipients[i];
+    	new google.maps.Marker({
+    		map: googleMap,
+    		position: new google.maps.LatLng(r.lat, r.lng),
+    		title: r.nickname + ' (' + r.booking_id + ')',
+    		icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+    	});
+    }
+    for (var i = 0; i < jsData.drives.length; i++) {
+    	var d = jsData.drives[i];
+    	var coords = [];
+    	for (var j = 0; j < d.length; j++) {
+    		if (d[j][0] != null && d[j][1] != null)
+    			coords.push(new google.maps.LatLng(d[j][0], d[j][1]));
+    	}
+    	coords.push(coords[0]);
+    	new google.maps.Polyline({
+    		path: coords,
+    		geodesic: true,
+    	    strokeColor: '#407F00',
+    	    strokeOpacity: 1.0,
+    	    strokeWeight: 2,
+    	    map: googleMap
+    	});
+    }
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<div id="map-canvas" style="width: 700px; height: 500px"></div>
+
 <h4 class="lead">Kitchen Statistics</h4>
-<table class="table table-hover">
+<table class="table table-hover" style="width: 600px">
 <tr><th></th><th>Number of drives</th><th>Number of meals</th><th>Maximum capacity</th></tr>
 {% for kitchen in kitchens %}
 <tr><th>{{ kitchen.kitchen_id }}</th><td>{{ kitchen.num_drives }}</td>
 <td>{{ kitchen.num_meals }}</td><td>{{ kitchen.capacity }}</td></tr>
 {% endfor %} 
 </table>
-<h4>Drives</h4>
+<h4 class="lead">Drives</h4>
 
-<table cellpadding="4">
+<table class="table table-hover" style="width: 600px">
 <tr><th>Kitchen</th><th>Meals</th><th></th><th>Route</th></tr>
 {% for drive in drives %}
 <tr>

@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'foodchain',
     'bootstrap_admin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,7 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'foodchain',
     'rest_framework'
 )
 
