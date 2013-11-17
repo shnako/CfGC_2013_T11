@@ -5,7 +5,8 @@ from django.shortcuts import render, redirect
 from django import forms
 
 from foodchain.models import Kitchen, Recipient, Meal, Drive
-from foodchain import csv_import
+from foodchain import csv_import, routing
+from foodchain.forms import PlannerParametersForm
 
 # Register your models here.
 
@@ -76,7 +77,15 @@ class DriveAdmin(admin.ModelAdmin):
         return my_urls + urls
     
     def planner_view(self, request):
-        return render(request, 'admin/foodchain/planner.html')
+        if request.method == 'POST':
+            form = PlannerParametersForm(request.POST)
+            if form.is_valid():
+                routing.handle_scheduling(form.cleaned_data)
+                self.message_user(request, 'Schedule updated successfully')
+                return redirect('admin:route-planner')
+        else:
+            form = PlannerParametersForm()
+        return render(request, 'admin/foodchain/planner.html', { 'form': form })
 
 admin.site.register(Drive, DriveAdmin)
 

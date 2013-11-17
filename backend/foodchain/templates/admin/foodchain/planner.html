@@ -4,4 +4,16 @@
 
 <h1>Route Planner</h1>
 
+<h4>Parameters</h4>
+<form method="post">{% csrf_token %}
+<table>
+{{ form }}
+</table>
+<input type="submit" name="submit" value="Reschedule" />
+</form>
+
+<h4>Current Schedule</h4>
+
+
+
 {% endblock %}

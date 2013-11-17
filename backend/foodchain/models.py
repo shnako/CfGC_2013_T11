@@ -30,7 +30,7 @@ class Meal(models.Model):
 
 class Drive(models.Model):
     kitchen = models.ForeignKey(Kitchen)
-    meals_to_deliver = models.IntegerField()
+    meals_to_deliver = models.IntegerField(null=True, blank=True)
 
 class Delivery(models.Model):
     class Meta:
