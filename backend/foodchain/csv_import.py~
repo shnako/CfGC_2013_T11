@@ -18,9 +18,6 @@ def import_kitchens(csv_file):
         k.postcode = item['Postcode']
         k.capacity = int(item['Capacity'])
 
-	if geocode(item['Postcode']) != None:
-	    k.lat, k.lng = geocode(item['Postcode'])
-
         k.save()
 
 def import_recipients(csv_file):
