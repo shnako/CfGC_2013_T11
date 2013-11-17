@@ -130,6 +130,8 @@ class DriveAdmin(admin.ModelAdmin):
         
         js_data = {
             'kitchens': list(Kitchen.objects.filter(lat__isnull=False).values('kitchen_id', 'lat', 'lng')),
+            'recipients': list(Recipient.objects.filter(lat__isnull=False).values('nickname', 'booking_id', 'lat', 'lng')),
+            'drives': list(([(d.kitchen.lat, d.kitchen.lng)] + [(x.recipient.lat, x.recipient.lng) for x in d.delivery_set.all()]) for d in drives)
         }
         
         return render(request, 'admin/foodchain/planner.html', {
