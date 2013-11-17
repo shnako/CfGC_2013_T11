@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">the food chain</string>
+    <string name="action_settings">Settings</string>
+    <string name="PrefFile">Prefs</string>
+    <string name="Username">Username</string>
+    <string name="Password">Password</string>
+    <string name="LogIn">Log in</string>
+    <string name="Motto">feeding the fight against HIV</string>
+    <string name="Status_Assigned">Assigned</string>
+    <string name="Status_Unassigned">Unassigned</string>
+    <string name="Placeholder">PLACEHOLDER</string>
+    <string name="Volunteer">Volunteer</string>
+    <string name="StartDelivery">Start delivery</string>
+    <string name="UpdateData">Update data</string>
+    <string name="SeeHistory">See history</string>
+    <string name="MarkDelivered">Mark delivered</string>
+    <string name="Navigate">Navigate</string>
+    <string name="NewRoute">New route</string>
+    <string name="ButtonOKLabel">OK</string>
+    <string name="ButtonCancelLabel">Cancel</string>
+    <string name="ShowMeals">Show meals</string>
+    <string name="AddressTag">Address:\n</string>
+    <string name="CallTFC">Call the food chain</string>
+    <string name="Assigned">You have an assigned delivery!</string>
+    <string name="Unassigned">No deliveries assigned!</string>
+    <string name="Skip">Skip</string>
+    <string name="DriverLicence">I have a driving licence</string>
+    <string name="FirstName">First name</string>
+    <string name="Email">Email address</string>
+    <string name="Phone">Phone number</string>
+    <string name="Register">Join us!</string>
+    <string name="ShowList">Show delivery list</string>
+    <string name="LogOut">Log out</string>
+    <string name="VolunteerMessage">As a volunteer you will be a vital link in The Food Chain. We completely depend on a dedicated, diverse and flexible volunteer force to deliver our life saving services.</string>
+    
+
+</resources>

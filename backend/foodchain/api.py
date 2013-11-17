@@ -2,7 +2,6 @@ import json
 
 from django.http import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import authenticate
-from django.views.decorators.csrf import csrf_exempt
 
 from foodchain.models import Delivery, Drive
 
@@ -18,12 +17,10 @@ def header_auth(f):
         return f(request, *args, **kwargs)
     return inner
 
-@csrf_exempt
 @header_auth
 def user_check(request):
     return HttpResponse('1')
 
-@csrf_exempt
 @header_auth
 def is_delivery_assigned(request):
     if Drive.objects.filter(driver=request.user).count() == 1:
@@ -31,7 +28,6 @@ def is_delivery_assigned(request):
     else:
         return HttpResponse('0')
 
-@csrf_exempt
 @header_auth
 def get_deliveries(request):
     drive = Drive.objects.get(driver=request.user)

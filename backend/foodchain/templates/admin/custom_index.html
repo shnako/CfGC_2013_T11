@@ -1,0 +1,10 @@
+{% extends 'admin/index.html' %}
+
+{% block content %}
+
+{{ block.super }}
+
+<div class="span3">
+<a href="{% url 'admin:route-planner' %}"><p class="lead">Route Planner</p></a>
+</div>
+{% endblock %}

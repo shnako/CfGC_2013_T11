@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="BackgroundColor">#4AAD3A</color>
+    <color name="ButtonMenuColor">#FFFFFF</color>
+	<color name="ButtonValidationColor">#FFFFFF</color>
+	<color name="White">#FFFFFF</color>
+    
+</resources>
