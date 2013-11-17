@@ -1,4 +1,6 @@
 import math
+import urllib2
+import json
 
 from foodchain import models
 
@@ -58,14 +60,42 @@ def smart_scheduler(max_journey_duration, max_meals_per_drive):
             while r_set:
                 prev = route[-1]
                 next_node = min(r_set, key=lambda r: dist(prev, r))
-                if meals_left - next_node.num_meals < 0:
+                if meals_left - next_node.num_meals < 0 or len(route) > 7:
                     break
                 route.append(next_node)
                 meals_left -= next_node.num_meals
                 r_set.remove(next_node)
 
+            while True:
+                req_string='http://maps.googleapis.com/maps/api/directions/json?origin='+k.postcode.replace(' ','%20')+',UK'
+                if (len(route) > 1):
+                    pipe_str=''
+                    for rt in route:
+                        pipe_str+=rt.postcode.replace(' ','%20')+',UK'+'|'
+                    pipe_str=pipe_str[:-1]
+                req_string=req_string+'&destination='+route[-1].postcode.replace(' ','%20')+',UK'
+                if (len(route) > 1):
+                    req_string=req_string+'&waypoints='+pipe_str
+                req_string=req_string+'&sensor=false'
+                        
+                request = urllib2.urlopen(req_string)
+                r = json.loads(request.read())
+                #print req_string
+                sum_time = 0;
+                for step in r['routes'][0]['legs']:
+        
+                    sum_time +=step['duration']['value']
+                #print sum_time
+                if (sum_time>120*60-(10*60*len(route))):
+                    r_set.add(route[-1])
+                    route = route[:-1]
+                else:
+                    break
+
+            print 'Route added'
             drive = models.Drive()
             drive.kitchen = k
+            drive.duration = sum_time
             drive.save()
             
             for i, r in enumerate(route, start=1):
