@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -40,7 +41,7 @@ class Meal(models.Model):
 class Drive(models.Model):
     kitchen = models.ForeignKey(Kitchen)
     meals_to_deliver = models.IntegerField(null=True, blank=True)
-    driver = models.ForeignKey('auth.User', null=True, blank=True)
+    driver = models.ForeignKey(User, null=True, blank=True)
     
     def __unicode__(self):
         return 'Drive #%d' % self.id
