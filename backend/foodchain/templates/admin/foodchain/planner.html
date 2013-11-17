@@ -55,8 +55,10 @@ var jsData = {{ js_data|safe }};
     	var d = jsData.drives[i];
     	var coords = [];
     	for (var j = 0; j < d.length; j++) {
-    		coords.push(new google.maps.LatLng(d[j][0], d[j][1]));
+    		if (d[j][0] != null && d[j][1] != null)
+    			coords.push(new google.maps.LatLng(d[j][0], d[j][1]));
     	}
+    	coords.push(coords[0]);
     	new google.maps.Polyline({
     		path: coords,
     		geodesic: true,
@@ -72,16 +74,16 @@ var jsData = {{ js_data|safe }};
 <div id="map-canvas" style="width: 700px; height: 600px"></div>
 
 <h4 class="lead">Kitchen Statistics</h4>
-<table class="table table-hover">
+<table class="table table-hover" style="width: 600px">
 <tr><th></th><th>Number of drives</th><th>Number of meals</th><th>Maximum capacity</th></tr>
 {% for kitchen in kitchens %}
 <tr><th>{{ kitchen.kitchen_id }}</th><td>{{ kitchen.num_drives }}</td>
 <td>{{ kitchen.num_meals }}</td><td>{{ kitchen.capacity }}</td></tr>
 {% endfor %} 
 </table>
-<h4>Drives</h4>
+<h4 class="lead">Drives</h4>
 
-<table cellpadding="4">
+<table class="table table-hover" style="width: 600px">
 <tr><th>Kitchen</th><th>Meals</th><th></th><th>Route</th></tr>
 {% for drive in drives %}
 <tr>
