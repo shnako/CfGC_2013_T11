@@ -76,6 +76,13 @@ class RecipientAdmin(admin.ModelAdmin):
 admin.site.register(Recipient, RecipientAdmin)
 
 class DriveAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'kitchen', 'meals_to_deliver', 'route', 'driver']
+    list_editable = ['driver']
+    
+    def route(self, obj):
+        return '<br />'.join(unicode(delivery) for delivery in obj.delivery_set.all())
+    route.allow_tags = True
+    
     def get_urls(self):
         urls = super(DriveAdmin, self).get_urls()
         my_urls = patterns('',

@@ -11,6 +11,9 @@ class Kitchen(models.Model):
     
     lat = models.FloatField(blank=True, null=True)
     lng = models.FloatField(blank=True, null=True)
+    
+    def __unicode__(self):
+        return self.kitchen_id
 
 
 class Recipient(models.Model):
@@ -20,17 +23,27 @@ class Recipient(models.Model):
     
     lat = models.FloatField(blank=True, null=True)
     lng = models.FloatField(blank=True, null=True)
+    
+    def __unicode__(self):
+        return ', '.join([self.nickname, self.postcode])
 
 
 class Meal(models.Model):
     recipient = models.ForeignKey(Recipient)
     meal_type = models.CharField(max_length=255)
     comment = models.TextField(blank=True)
+    
+    def __unicode__(self):
+        return self.meal_type
 
 
 class Drive(models.Model):
     kitchen = models.ForeignKey(Kitchen)
     meals_to_deliver = models.IntegerField(null=True, blank=True)
+    driver = models.ForeignKey('auth.User', null=True, blank=True)
+    
+    def __unicode__(self):
+        return 'Drive #%d' % self.id
 
 class Delivery(models.Model):
     class Meta:
@@ -40,3 +53,6 @@ class Delivery(models.Model):
     order = models.IntegerField()
     recipient = models.ForeignKey(Recipient)
     delivered = models.BooleanField(default=False)
+    
+    def __unicode__(self):
+        return '#%d [%s]%s' % (self.order, unicode(self.recipient), ' delivered' if self.delivered else '')
