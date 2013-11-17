@@ -143,4 +143,3 @@ class DriveAdmin(admin.ModelAdmin):
 
 admin.site.register(Drive, DriveAdmin)
 
-admin.site.index_template = 'admin/custom_index.html'
