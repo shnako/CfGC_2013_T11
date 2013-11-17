@@ -1,7 +1,8 @@
 import csv
 import itertools
+import time
 
-from geocoding import *
+from geocoding import geocode
 from foodchain import models
 
 def import_kitchens(csv_file):
@@ -17,11 +18,10 @@ def import_kitchens(csv_file):
         k.address = item['Address']
         k.postcode = item['Postcode']
         k.capacity = int(item['Capacity'])
-
-	if geocode(item['Postcode']) != None:
-	    k.lat, k.lng = geocode(item['Postcode'])
-
+        k.lat, k.lng = geocode(address=k.address) or (None, None)
         k.save()
+        
+        time.sleep(0.3)
 
 def import_recipients(csv_file):
     reader = csv.DictReader(csv_file.splitlines())
@@ -35,10 +35,11 @@ def import_recipients(csv_file):
         recipient = models.Recipient()
         recipient.nickname = group[0]['Nickname'].decode('latin1')
         recipient.postcode = group[0]['Primary Postal Code']       	
-	recipient.booking_id = k
-	
-	if geocode(group[0]['Primary Postal Code']) != None:
-	    recipient.lat, recipient.lng = geocode(group[0]['Primary Postal Code'])
+        recipient.booking_id = k
+        if recipient.postcode:
+            recipient.lat, recipient.lng = geocode(recipient.postcode) or (None, None)
         recipient.save()
         for meal in group:
             recipient.meal_set.create(meal_type=meal['Meal Type'], comment=meal['Comments'])
+        
+        time.sleep(0.3)

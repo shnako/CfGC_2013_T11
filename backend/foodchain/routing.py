@@ -48,7 +48,6 @@ def smart_scheduler(max_journey_duration, max_meals_per_drive):
         r.kitchen.pool.append(r)
 
     for k in kitchens:
-        print 'Kitchen', k.lat, k.lng
         r_set = set(k.pool)
         while r_set:
             first = min(r_set, key=lambda r: dist(k, r))
@@ -65,6 +64,14 @@ def smart_scheduler(max_journey_duration, max_meals_per_drive):
                 meals_left -= next_node.num_meals
                 r_set.remove(next_node)
 
-            print 'Route', ', '.join('%s;%s' % (r.lat, r.lng) for r in route)
+            drive = models.Drive()
+            drive.kitchen = k
+            drive.save()
+            
+            for i, r in enumerate(route, start=1):
+                drive.delivery_set.create(order=i, recipient=r)
+            
+            drive.meals_to_deliver = sum(d.recipient.meal_set.count() for d in drive.delivery_set.all())
+            drive.save()
 
 

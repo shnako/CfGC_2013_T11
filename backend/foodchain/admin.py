@@ -46,8 +46,13 @@ class MealInline(admin.TabularInline):
     extra = 0
 
 class RecipientAdmin(admin.ModelAdmin):
-    list_display = ['booking_id', 'nickname', 'postcode']
+    list_display = ['booking_id', 'nickname', 'postcode', 'coordinates']
     inlines = [MealInline]
+    
+    def coordinates(self, obj):
+        if not obj.lat or not obj.lng:
+            return '(none)'
+        return '%.4f, %.4f' % (obj.lat, obj.lng)
     
     def get_urls(self):
         urls = super(RecipientAdmin, self).get_urls()
@@ -108,12 +113,12 @@ class DriveAdmin(admin.ModelAdmin):
         drives.sort(key=lambda d: d.kitchen.kitchen_id)
         
         kitchens = []
-        drives_by_kitchen = itertools.groupby(drives, key=lambda d: d.kitchen)
-        for kitchen, drives in drives_by_kitchen:
-            drives = list(drives)
-            kitchen.num_meals = sum(x.meals_to_deliver for x in drives)
-            kitchen.num_drives = len(drives)
+        for kitchen, d in itertools.groupby(drives, key=lambda d: d.kitchen):
+            d = list(d)
+            kitchen.num_meals = sum(x.meals_to_deliver for x in d)
+            kitchen.num_drives = len(d)
             kitchens.append(kitchen)
+        kitchens.sort(key=lambda k: k.kitchen_id)
         
         return render(request, 'admin/foodchain/planner.html', {
             'form': form,
