@@ -1,4 +1,6 @@
-from django.contrib import admin
+import itertools
+
+from django.contrib import admin, messages
 from django.http import HttpResponse
 from django.conf.urls import url, patterns
 from django.shortcuts import render, redirect
@@ -85,7 +87,35 @@ class DriveAdmin(admin.ModelAdmin):
                 return redirect('admin:route-planner')
         else:
             form = PlannerParametersForm()
-        return render(request, 'admin/foodchain/planner.html', { 'form': form })
+        
+        unmapped_kitchens = Kitchen.objects.filter(lat=None)
+        if unmapped_kitchens:
+            self.message_user(request,
+                              '%d kitchens have no associated coordinates' % len(unmapped_kitchens),
+                              level=messages.ERROR)
+        
+        unmapped_recipients = Recipient.objects.filter(lat=None)
+        if unmapped_recipients:
+            self.message_user(request,
+                              '%d recipients have no associated coordinates' % len(unmapped_recipients),
+                              level=messages.ERROR)
+        
+        drives = list(Drive.objects.all())
+        drives.sort(key=lambda d: d.kitchen.kitchen_id)
+        
+        kitchens = []
+        drives_by_kitchen = itertools.groupby(drives, key=lambda d: d.kitchen)
+        for kitchen, drives in drives_by_kitchen:
+            drives = list(drives)
+            kitchen.num_meals = sum(x.meals_to_deliver for x in drives)
+            kitchen.num_drives = len(drives)
+            kitchens.append(kitchen)
+        
+        return render(request, 'admin/foodchain/planner.html', {
+            'form': form,
+            'drives': drives,
+            'kitchens': kitchens,
+        })
 
 admin.site.register(Drive, DriveAdmin)
 
