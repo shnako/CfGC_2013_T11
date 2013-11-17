@@ -6,7 +6,7 @@ from foodchain import models
 
 def handle_scheduling(form_data):
     models.Drive.objects.all().delete()  # Delete current schedule
-    
+
     algorithm = form_data.pop('algorithm')
     if algorithm == 'dummy':
         return dummy_scheduler(**form_data)
@@ -17,19 +17,19 @@ def handle_scheduling(form_data):
 def dummy_scheduler(**params):
     max_journey_duration = params.pop('max_journey_duration')
     max_meals_per_drive = params.pop('max_meals_per_drive')
-    
+
     kitchens = models.Kitchen.objects.all()
     recipients = models.Recipient.objects.all()
-    
+
     # Create one drive per each recipient
     the_kitchen = kitchens[0]
     for recipient in recipients:
         drive = models.Drive()
         drive.kitchen = the_kitchen
         drive.save()
-        
+
         drive.delivery_set.create(order=1, recipient=recipient)
-        
+
         drive.meals_to_deliver = sum(d.recipient.meal_set.count() for d in drive.delivery_set.all())
         drive.save()
 
@@ -77,14 +77,15 @@ def smart_scheduler(max_journey_duration, max_meals_per_drive):
                 if (len(route) > 1):
                     req_string=req_string+'&waypoints='+pipe_str
                 req_string=req_string+'&sensor=false'
-                        
+
                 request = urllib2.urlopen(req_string)
                 r = json.loads(request.read())
                 #print req_string
                 sum_time = 0;
-                for step in r['routes'][0]['legs']:
-        
-                    sum_time +=step['duration']['value']
+                if len(r['routes']) > 0:
+                    for step in r['routes'][0]['legs']:
+
+                        sum_time +=step['duration']['value']
                 #print sum_time
                 if (sum_time>120*60-(10*60*len(route))):
                     r_set.add(route[-1])
@@ -97,10 +98,10 @@ def smart_scheduler(max_journey_duration, max_meals_per_drive):
             drive.kitchen = k
             drive.duration = sum_time
             drive.save()
-            
+
             for i, r in enumerate(route, start=1):
                 drive.delivery_set.create(order=i, recipient=r)
-            
+
             drive.meals_to_deliver = sum(d.recipient.meal_set.count() for d in drive.delivery_set.all())
             drive.save()
 
