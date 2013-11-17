@@ -44,10 +44,14 @@ def smart_scheduler(max_journey_duration, max_meals_per_drive):
 
     for k in kitchens:
         k.pool = []
+        k.remaining = k.capacity
 
     for r in recipients:
-        r.kitchen = min(kitchens, key=lambda k: dist(r, k))
+        r.kitchen = min((k for k in kitchens if k.remaining >= r.num_meals),
+                        key=lambda k: dist(r, k))
         r.kitchen.pool.append(r)
+        r.kitchen.remaining -= r.num_meals
+        #print r, r.kitchen, r.kitchen.remaining
 
     for k in kitchens:
         r_set = set(k.pool)

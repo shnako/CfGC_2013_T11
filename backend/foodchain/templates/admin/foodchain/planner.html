@@ -22,6 +22,25 @@
 {% for kitchen in kitchens %}
 <tr><th>{{ kitchen.kitchen_id }}</th><td>{{ kitchen.num_drives }}</td>
 <td>{{ kitchen.num_meals }}</td><td>{{ kitchen.capacity }}</td></tr>
+{% endfor %} 
+</table>
+-<h4>Drives</h4>
+
+<table cellpadding="4">
+<tr><th>Kitchen</th><th>Meals</th><th></th><th>Route</th></tr>
+{% for drive in drives %}
+<tr>
+<td>{{ drive.kitchen.kitchen_id }}</td>
+<td style="text-align: center">{{ drive.meals_to_deliver }}</td>
+<td></td>
+<td>
+  <ol>
+  {% for delivery in drive.delivery_set.all %}
+    <li>{{ delivery.recipient.nickname }}, {{ delivery.recipient.postcode }}</li>
+  {% endfor %}
+  </ol>
+</td>
+</tr>
 {% endfor %}
 </table>
 
