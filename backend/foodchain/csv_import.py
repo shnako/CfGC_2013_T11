@@ -8,7 +8,7 @@ from foodchain import models
 def import_kitchens(csv_file):
     reader = csv.DictReader(csv_file.splitlines())
     items = list(reader)
-    # TODO: do merging
+
     models.Kitchen.objects.all().delete()
     for item in items:
         if not item['Kitchen ID']:
@@ -27,7 +27,7 @@ def import_recipients(csv_file):
     reader = csv.DictReader(csv_file.splitlines())
     items = list(reader)
     models.Recipient.objects.all().delete()
-    print items
+    
     for k, g in itertools.groupby(items, lambda item: item['Booking ID']):
         group = list(g)
         if not k:
