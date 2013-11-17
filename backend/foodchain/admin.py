@@ -1,4 +1,5 @@
 import itertools
+import json
 
 from django.contrib import admin, messages
 from django.http import HttpResponse
@@ -127,10 +128,17 @@ class DriveAdmin(admin.ModelAdmin):
             kitchens.append(kitchen)
         kitchens.sort(key=lambda k: k.kitchen_id)
         
+        js_data = {
+            'kitchens': list(Kitchen.objects.filter(lat__isnull=False).values('kitchen_id', 'lat', 'lng')),
+            'recipients': list(Recipient.objects.filter(lat__isnull=False).values('nickname', 'booking_id', 'lat', 'lng')),
+            'drives': list(([(d.kitchen.lat, d.kitchen.lng)] + [(x.recipient.lat, x.recipient.lng) for x in d.delivery_set.all()]) for d in drives)
+        }
+        
         return render(request, 'admin/foodchain/planner.html', {
             'form': form,
             'drives': drives,
             'kitchens': kitchens,
+            'js_data': json.dumps(js_data),
         })
 
 admin.site.register(Drive, DriveAdmin)
