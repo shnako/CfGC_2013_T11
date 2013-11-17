@@ -8,6 +8,7 @@
 #nav-menu-top-bar {
 	background-color: #49aa43;
 	background-image: none;
+	color: white;
 }
 </style>
 <link rel="stylesheet" href="{{ STATIC_URL }}swatch.css">
@@ -16,7 +17,7 @@
 {% block title %}{{ title }} | {% trans 'the food chain' %}{% endblock %}
 
 {% block branding %}
-<h1 id="site-name" class="brand"><img src="{% static 'logo.png' %}" /></h1>
+<h1 id="site-name" class="brand"><a href="{% url 'admin:index' %}"><img src="{% static 'logo.png' %}" style="height: 40px" /></a> <a href="{% url 'admin:route-planner' %}" class="changelink btn btn-primary" style="margin-left: 20px">Route Planner</a></h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
