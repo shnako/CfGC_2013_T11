@@ -16,6 +16,34 @@
 
 {% if drives %}
 
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAHNzcZ7GiMUGjA2cVeTjsktAMzM3hJq2M&sensor=false">
+</script>
+<script type="text/javascript">
+var jsData = {{ js_data|safe }};
+
+  function initialize() {
+    var mapOptions = {
+      center: new google.maps.LatLng(51.5072, -0.1075),
+      zoom: 11,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    googleMap = new google.maps.Map(document.getElementById("map-canvas"),
+        mapOptions);
+    
+    for (var i = 0; i < jsData.kitchens.length; i++) {
+    	var k = jsData.kitchens[i];
+    	new google.maps.Marker({
+    		map: googleMap,
+    		position: new google.maps.LatLng(k.lat, k.lng),
+    		title: k.kitchen_id
+    	});
+    }
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<div id="map-canvas" style="width: 700px; height: 500px"></div>
+
 <h4>Kitchen Statistics</h4>
 <table cellpadding="8">
 <tr><th></th><th>Number of drives</th><th>Number of meals</th><th>Maximum capacity</th></tr>
