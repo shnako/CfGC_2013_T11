@@ -79,6 +79,10 @@ class DriveAdmin(admin.ModelAdmin):
         return my_urls + urls
     
     def planner_view(self, request):
+        if request.POST.get('clear_plan'):
+            Drive.objects.all().delete()
+            return redirect('admin:route-planner')
+        
         if request.method == 'POST':
             form = PlannerParametersForm(request.POST)
             if form.is_valid():
