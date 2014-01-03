@@ -1,8 +1,5 @@
 package com.jpmorgan.thefoodchain.Menus;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import com.jpmorgan.thefoodchain.R;
 
 import com.jpmorgan.thefoodchain.Dialogs.InformationDialog;
@@ -24,6 +21,7 @@ public class LoginMenu extends Activity {
 
 	private Button btLogin, btRegister;
 	private EditText txtUser, txtPass; 
+	@SuppressWarnings("unused")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

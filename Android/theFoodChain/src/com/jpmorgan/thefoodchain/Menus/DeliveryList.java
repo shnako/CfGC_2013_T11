@@ -3,15 +3,10 @@ package com.jpmorgan.thefoodchain.Menus;
 import com.jpmorgan.thefoodchain.R;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class DeliveryList extends Activity{
 

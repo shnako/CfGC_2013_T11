@@ -1,15 +1,12 @@
 package com.jpmorgan.thefoodchain.Helpers;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -18,10 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.AsyncTask;
-import android.os.StrictMode;
-
-import com.jpmorgan.thefoodchain.Dialogs.InformationDialog;
 import com.jpmorgan.thefoodchain.Objects.Account;
 import com.jpmorgan.thefoodchain.Objects.Delivery;
 import com.jpmorgan.thefoodchain.Objects.DeliverySchedule;
@@ -137,6 +130,7 @@ public class ServerAdapter{
 			con.setRequestProperty("X-Username", acc.getUsername());
 			con.setRequestProperty("X-Password", acc.getPassword());
 			Callable<Boolean> callable = new Callable<Boolean>() {
+				@SuppressWarnings("unused")
 				public Boolean call() {
 					int responseCode;
 					try {
@@ -186,6 +180,7 @@ public class ServerAdapter{
 			};
 			ExecutorService executor = Executors.newSingleThreadExecutor();
 			Future<Boolean> future = executor.submit(callable);
+			@SuppressWarnings("unused")
 			boolean res = future.get();
 			executor.shutdown();
 

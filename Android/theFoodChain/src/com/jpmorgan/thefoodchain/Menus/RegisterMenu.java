@@ -1,13 +1,9 @@
 package com.jpmorgan.thefoodchain.Menus;
 
 import com.jpmorgan.thefoodchain.R;
-import com.jpmorgan.thefoodchain.Dialogs.ConfirmationDialog;
 import com.jpmorgan.thefoodchain.Dialogs.InformationDialog;
-import com.jpmorgan.thefoodchain.Menus.DeliveryMenu.ButtonClicked;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +14,7 @@ import android.widget.TextView;
 
 public class RegisterMenu extends Activity {
 	private TextView txtFirstName, txtPhone;
+	@SuppressWarnings("unused")
 	private CheckBox cbLicence;
 	private Button btRegister;
 	
