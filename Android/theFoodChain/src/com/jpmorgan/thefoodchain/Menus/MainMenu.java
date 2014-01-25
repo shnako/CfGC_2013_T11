@@ -37,7 +37,7 @@ public class MainMenu extends Activity {
 		btLogout = (Button)findViewById(R.id.btLogOut);
 		btLogout.setOnClickListener(new ButtonClicked());
 		tvStatus = (TextView)findViewById(R.id.tvStatus);
-
+		
 		//Hide the start delivery button if no delivery schedule assigned.
 		if (!ServerAdapter.isAssigned()) {
 			tvStatus.setText("Unassigned");//Move to string resource.
